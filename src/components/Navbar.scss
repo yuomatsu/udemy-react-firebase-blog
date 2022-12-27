@@ -4,14 +4,16 @@
     align-items: center;
     height: 50px;
     background-color: #f3ac13;
-    gap: 5px;
-}
+    gap: 45px;
+    a {
+        text-decoration: none;
+        color: #fff;
+        svg {
+            margin-right: 5px;
+        }
+        &:hover {
+            color:#a3ade6;
 
-.nav a {
-    text-decoration: none;
-    color: #fff;
-}
-
-.nav a:hover {
-    color:#a3ade6;
+        }
+    }
 }
