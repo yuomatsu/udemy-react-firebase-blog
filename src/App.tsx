@@ -1,6 +1,7 @@
 import React from "react";
 import "./App.scss";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { useState } from "react";
 
 import Home from "./components/Home";
 import CreatePost from "./components/CreatePost";
@@ -9,14 +10,18 @@ import Logout from "./components/Logout";
 import Navbar from "./components/Navbar";
 
 function App() {
+  const [isAuth, setIsAuth]: [
+    boolean,
+    React.Dispatch<React.SetStateAction<boolean>>
+  ] = useState<boolean>(false);
   return (
     <Router>
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />}></Route>
         <Route path="/createpost" element={<CreatePost />}></Route>
-        <Route path="/login" element={<Login />}></Route>
-        <Route path="/logout" element={<Logout />}></Route>
+        <Route path="/login" element={<Login setIsAuth={setIsAuth} />}></Route>
+        <Route path="/logout" element={<Logout setIsAuth={setIsAuth} />}></Route>
       </Routes>
     </Router>
   );
