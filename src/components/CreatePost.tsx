@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./CreatePost.scss";
 import { useState } from "react";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "../firebase";
-import { getAuth } from 'firebase/auth'
+import { getAuth } from "firebase/auth";
 import { useNavigate } from "react-router";
 
-const CreatePost = () => {
+type Props = {
+  isAuth: boolean;
+}
+
+const CreatePost = ({isAuth}: Props) => {
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [postText, setPostText] = useState("");
@@ -18,11 +22,16 @@ const CreatePost = () => {
       author: {
         username: getAuth().currentUser?.displayName,
         id: getAuth().currentUser?.uid,
-      }
+      },
+      timpstamp: serverTimestamp(),
     });
     console.log("Document written with ID: ", docRef.id);
     navigate("/");
   };
+
+  useEffect(() => {
+    isAuth || navigate("/login");
+  }, [isAuth, navigate])
 
   return (
     <div className="createPostPage">
