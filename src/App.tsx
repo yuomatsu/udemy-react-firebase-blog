@@ -1,25 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.scss";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { useState } from "react";
+
+import Home from "./components/Home";
+import CreatePost from "./components/CreatePost";
+import Login from "./components/Login";
+import Logout from "./components/Logout";
+import Navbar from "./components/Navbar";
 
 function App() {
+  const [isAuth, setIsAuth]: [
+    boolean,
+    React.Dispatch<React.SetStateAction<boolean>>
+  ] = useState<boolean>(localStorage["isAuth"]);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Navbar isAuth={isAuth} />
+      <Routes>
+        <Route path="/" element={<Home />}></Route>
+        <Route
+          path="/createpost"
+          element={<CreatePost isAuth={isAuth} />}
+        ></Route>
+        <Route path="/login" element={<Login setIsAuth={setIsAuth} />}></Route>
+        <Route
+          path="/logout"
+          element={<Logout setIsAuth={setIsAuth} />}
+        ></Route>
+      </Routes>
+    </Router>
   );
 }
 
