@@ -13,7 +13,7 @@ function App() {
   const [isAuth, setIsAuth]: [
     boolean,
     React.Dispatch<React.SetStateAction<boolean>>
-  ] = useState<boolean>(false);
+  ] = useState<boolean>(localStorage["isAuth"]);
   return (
     <Router>
       <Navbar isAuth={isAuth} />
