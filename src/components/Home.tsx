@@ -1,7 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { collection, getDocs, query, orderBy } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import {
+  collection,
+  getDocs,
+  deleteDoc,
+  doc,
+  query,
+  orderBy,
+} from "firebase/firestore";
 import "./Home.scss";
 import { db } from "../firebase";
+import { getAuth } from "firebase/auth";
 
 type postList = {
   id: string;
@@ -10,19 +18,25 @@ type postList = {
   title: string;
   timestamp: string;
 };
+type postID = string;
 
 const Home = () => {
   // TODO: anyをやめたい
   const [postList, setPostList] = useState<postList[] | any>([]);
+
   useEffect(() => {
     const getPosts = async () => {
       const data = await getDocs(collection(db, "posts"));
-      // const data2 = query(data, orderBy('timestamp', 'asc'));
-      console.log(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
       setPostList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     };
     getPosts();
   }, []);
+
+  const handleDelete = async (id: postID) => {
+    await deleteDoc(doc(db, "posts", id));
+    setPostList(postList.filter((post: { id: string }) => post.id !== id));
+  };
+
   return (
     <div className="homePage">
       {postList.map((post: postList) => {
@@ -35,7 +49,9 @@ const Home = () => {
             {/* <div className="postTextContainer">{post.timestamp}</div> */}
             <div className="nameAndDeleteButton">
               <h3>@{post.author.username}</h3>
-              <button>削除</button>
+              {post.author.id === getAuth().currentUser?.uid && (
+                <button onClick={() => handleDelete(post.id)}>削除</button>
+              )}
             </div>
           </div>
         );
